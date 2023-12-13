@@ -77,6 +77,7 @@ export type _GenerationPrimitivePaywallProduct = {
   price: number | string;
   title: string;
   description: string;
+  button?: string | (Pick<FlatButtonProps, 'to'> & { content: string });
 };
 
 export type _GenerationPaywallProduct = _GenerationPrimitivePaywallProduct & {

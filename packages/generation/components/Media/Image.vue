@@ -11,14 +11,16 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from 'vue';
+import { computed, toRefs } from 'vue';
 
 import { ImagePresetProps } from './Media.preset.props';
 import { useLoadedImage } from './useLoadedImage';
 
 const props = defineProps<ImagePresetProps>();
 
-const { src, webp } = toRefs(props);
+const { src, webp, aspectRatio } = toRefs(props);
+
+const computedAspectRatio = computed(() => aspectRatio?.value ?? 1);
 
 const loadedSrc = useLoadedImage(src);
 const loadedWebp = useLoadedImage(webp);
@@ -26,7 +28,12 @@ const loadedWebp = useLoadedImage(webp);
 
 <style lang="scss" module>
 .container {
-  aspect-ratio: 1/1;
+  position: relative;
+  aspect-ratio: v-bind(computedAspectRatio);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .img {

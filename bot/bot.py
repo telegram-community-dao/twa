@@ -78,51 +78,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     user_data = get_user_data(update.effective_user)
 
+    user_data["rnd"] = uuid.uuid4()  # add random value to user data to avoid caching
+    print(f"User data: {user_data}")
+
+    print(f"User data: {add_get_params_to_url('https://60fb-2-152-161-169.ngrok-free.app', user_data)}")
+
+
     reply_markup = ReplyKeyboardMarkup.from_column(
         [
             KeyboardButton(
-                text="🌈 Base Onboarding",
+                text="DAO onboarding",
                 web_app=WebAppInfo(
                     url=add_get_params_to_url(
-                        "https://easterok.github.io/telegram-onboarding-kit", user_data
-                    )
-                ),
-            ),
-            KeyboardButton(
-                text="💃 Fashion AI Onboarding",
-                web_app=WebAppInfo(
-                    url=add_get_params_to_url("https://tok-ai.netlify.app", user_data)
-                ),
-            ),
-            KeyboardButton(
-                text="🧘 Meditation Onboarding",
-                web_app=WebAppInfo(
-                    url=add_get_params_to_url(
-                        "https://tok-meditation.netlify.app", user_data
-                    )
-                ),
-            ),
-            KeyboardButton(
-                text="🧚‍♂️ AI Tales Onboarding",
-                web_app=WebAppInfo(
-                    url=add_get_params_to_url(
-                        "https://tok-wondertales.netlify.app", user_data
-                    )
-                ),
-            ),
-            KeyboardButton(
-                text="🔐 VPN Onboarding",
-                web_app=WebAppInfo(
-                    url=add_get_params_to_url(
-                        "https://tok-vpn.netlify.app", user_data
-                    )
-                ),
-            ),
-            KeyboardButton(
-                text="🧠 ChatGPT Onboarding",
-                web_app=WebAppInfo(
-                    url=add_get_params_to_url(
-                        "https://tok-chatgpt.netlify.app", user_data
+                        "https://60fb-2-152-161-169.ngrok-free.app", user_data
                     )
                 ),
             ),
@@ -392,6 +360,8 @@ def run_bot(
     ]:
         if payment_token:
             application.bot_data["payment_tokens"][payment_method] = payment_token
+
+    # application.add_handler()
 
     # handlers
     ## /start

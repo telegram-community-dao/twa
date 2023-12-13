@@ -1,5 +1,9 @@
 <template>
   <primitive-slide v-bind="props" @on-click="onClick">
+    <template #before>
+      <slot name="beforePrimitive" />
+    </template>
+    <slot name="before" />
     <p v-if="carousel && pagination === 'count'" :class="$style.count">
       {{ slideCount }}
     </p>

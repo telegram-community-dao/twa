@@ -1,8 +1,14 @@
-// See https://github.com/Easterok/telegram-onboarding-kit/tree/main/packages/ui/styles
-// on how to override global CSS parameters
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
 
 :root {
+  --tg-viewport-stable-height: calc(100vh - 40px);
 }
 
-html[data-theme='dark'] {
+html[data-theme="dark"] {
+}
+
+* {
+  text-wrap: balance;
 }

@@ -14,10 +14,9 @@ export type IconPresetProps = {
 export type StickerPresetProps = {
   type: 'sticker';
   src: Promise<typeof import('*.tgs')> | null;
-
   size?: number | [number, number];
-
   style?: string | CSSProperties;
+  aspectRatio?: number;
 } & Pick<StickerProps, 'speed'>;
 
 // todo: Find a way to translate images
@@ -33,6 +32,8 @@ export type ImagePresetProps = {
   webp?: Promise<typeof import('*.webp')>;
 
   style?: string | CSSProperties;
+  
+  aspectRatio?: number;
 
   static?: boolean;
 };

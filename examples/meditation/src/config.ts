@@ -13,7 +13,7 @@ export default defineConfig({
           media: {
             type: 'image',
             src: import('./assets/img/1.webp'),
-            style: 'max-height: min(650px, 70vh);',
+            style: 'max-height: min(120px, 25vh);',
           },
           textAlign: 'center',
           title: '_s1.title',

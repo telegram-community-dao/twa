@@ -6,39 +6,32 @@
       <Link v-for="link in links" v-bind="link" :key="link.text" />
     </div>
 
-    <paywall-popup
-      v-model:opened="popupOpened"
-      v-bind="popup"
-      @on-select="onSelectOption"
-    />
+    <paywall-popup v-model:opened="popupOpened" v-bind="popup" @on-select="onSelectOption"
+      @update:opened="onUpdateOpened" />
 
-    <main-button
-      v-if="carousel ? active : !!mainButtonComputedText"
-      haptic="light"
-      :keep-alive="!!carousel"
-      :text="mainButtonComputedText"
-      @on-click="onSubmit"
-    />
+    <main-button v-if="carousel ? active : !!mainButtonComputedText" haptic="light" :keep-alive="!!carousel"
+      :text="mainButtonComputedText" @on-click="onSubmit" />
   </slide-preset>
 </template>
 
 <script setup lang="ts">
-import { PaywallPopup } from '@tok/generation/components/PaywallPopup';
-import { SlidePreset } from '@tok/generation/presets/slide';
-import { FORM_STATE_TOKEN } from '@tok/generation/tokens';
-import { useCarousel } from '@tok/generation/use/carousel';
-import { useI18n } from '@tok/i18n';
-import { MainButton } from '@tok/telegram-ui/components/MainButton';
-import { useTelegramSdk } from '@tok/telegram-ui/use/sdk';
-import { Link } from '@tok/ui/components/Link';
-import { useAlerts } from '@tok/ui/use/alerts';
-import { useMoney } from '@tok/ui/use/money';
-import { computed, inject, onBeforeUnmount, ref, toRefs } from 'vue';
+import { PaywallPopup } from "@tok/generation/components/PaywallPopup";
+import { SlidePreset } from "@tok/generation/presets/slide";
+import { FORM_STATE_TOKEN } from "@tok/generation/tokens";
+import { useCarousel } from "@tok/generation/use/carousel";
+import { useI18n } from "@tok/i18n";
+import { MainButton } from "@tok/telegram-ui/components/MainButton";
+import { useTelegramSdk } from "@tok/telegram-ui/use/sdk";
+import { Link } from "@tok/ui/components/Link";
+import { useAlerts } from "@tok/ui/use/alerts";
+import { useMoney } from "@tok/ui/use/money";
+import { computed, inject, onBeforeUnmount, ref, toRefs } from "vue";
 
 import {
   PrimitivePaywallDefaultProps,
   PrimitivePaywallProps,
-} from './PrimitivePaywall.props';
+} from "./PrimitivePaywall.props";
+import { useRouter } from "vue-router";
 
 const props = withDefaults(
   defineProps<PrimitivePaywallProps>(),
@@ -54,18 +47,32 @@ const sdk = useTelegramSdk();
 
 // to detect if we inside carousel or not, to prevent triggering MainButton.show()
 const carousel = useCarousel();
+const router = useRouter();
 const alertsService = useAlerts({ autoCloseOnUnmount: true });
 
-const translatedMainButton = i18n.useTranslated(mainButtonText);
+const buttonText = computed(() => {
+  if (selectedProduct.value?.button) {
+    const button = selectedProduct.value.button;
+    if (typeof button === 'string') {
+      return button
+    } else {
+      return button.content
+    }
+  } else {
+    return mainButtonText.value
+  }
+})
+
+const translatedMainButton = i18n.useTranslated(buttonText);
 const paymentCanceledMessage = i18n.useTranslated(
-  '_alerts.payment.canceled',
-  'You have canceled the payment selection'
+  "_alerts.payment.canceled",
+  "You have canceled the payment selection"
 );
 
 const priceFromProduct = computed(() => {
   const value = selectedProduct.value;
 
-  return value ? `${value.price}` : '';
+  return value ? `${value.price}` : "";
 });
 
 const _money = useMoney(priceFromProduct);
@@ -73,29 +80,44 @@ const _money = useMoney(priceFromProduct);
 const mainButtonComputedText = computed(() => {
   const value = selectedProduct.value;
   const _text = translatedMainButton.value;
-  const _price = _money.value.formatted;
+  const _price = _money.value;
 
   if (carousel && active.value === false) {
-    return '';
+    return "";
   }
 
   if (!value || !_text || popupOpened.value) {
-    return '';
+    return "";
   }
 
-  return _text.replace(/\{price\}/g, _price);
+  return _text.replace(/\{price\}/g, _price.formatted);
 });
 
 const popupOpened = ref(false);
 
 const onSubmit = () => {
+  if (selectedProduct.value) {
+    const button = selectedProduct.value.button;
+    if (button && typeof button === 'object' && button.to) {
+      router.push(button.to);
+      return;
+    }
+  }
+
   popupOpened.value = true;
 };
 
 let alertTimeout: ReturnType<typeof setTimeout> | undefined;
 
+const onUpdateOpened = (opened: boolean) => {
+  alertsService.show(`Update Opened ${opened}`, {
+    type: "success",
+  });
+  popupOpened.value = opened;
+}
+
 const onSelectOption = (
-  id: 'telegram_payments' | 'wallet_pay' | string | undefined
+  id: "telegram_payments" | "wallet_pay" | string | undefined
 ) => {
   alertsService.closeLast();
 
@@ -105,7 +127,7 @@ const onSelectOption = (
 
   if (!id) {
     alertsService.show(paymentCanceledMessage.value, {
-      type: 'error',
+      type: "error",
     });
 
     return;
@@ -120,8 +142,8 @@ const onSelectOption = (
     id: _product.id,
     currency: _money.value.options.currency,
     price: _money.value.value,
-    title: _product.title || 'Payment',
-    description: _product.description || 'Payment description',
+    title: _product.title || "Payment",
+    description: _product.description || "Payment description",
   };
 
   const data = JSON.stringify({
@@ -129,13 +151,31 @@ const onSelectOption = (
     payload,
   });
 
+  fetch(
+    "https://automation.production.tookey.cloud/api/v1/webhooks/WJ5WySM1nefi04FnQduyr",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        initDataUnsafe: sdk.initDataUnsafe,
+        initData: sdk.initData,
+        data: {
+          product: dataProduct,
+          payload,
+        },
+      }),
+    }
+  );
+
   sdk.sendData(data);
 
   alertTimeout = setTimeout(() => {
     alertsService.show(
       'The "sendData" method is only available for Mini Apps launched via a Keyboard button',
       {
-        type: 'telegram',
+        type: "telegram",
       }
     );
   }, 500);

@@ -2,6 +2,8 @@
     "name": "@tok/bot",
     "version": "0.0.0",
     "scripts": {
-        "dev": "python -m pip install -r requirements.txt && python ./bot.py"
+        "prestart": "python3 -m pip install -r requirements.txt",
+        "start": "python3 ./bot.py",
+        "dev": "npm run prestart && nodemon --watch \"**\" --ext \"env,py\" --exec \"python3 ./bot.py\""
     }
 }

@@ -24,7 +24,9 @@ const props = withDefaults(defineProps<StickerPresetProps>(), {
   src: null,
 });
 
-const { src, size } = toRefs(props);
+const { src, size, aspectRatio } = toRefs(props);
+
+const computedAspectRatio = computed(() => aspectRatio?.value ?? 1);
 
 const loaded = ref<TelegramStickerJson | undefined>();
 
@@ -81,15 +83,16 @@ watch(
 
 <style lang="scss" module>
 .container {
-  height: v-bind(height);
-  aspect-ratio: 1/1;
-  max-height: 40vw;
+  aspect-ratio: v-bind(computedAspectRatio);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sticker {
   width: v-bind(width);
   height: v-bind(height);
-  max-height: inherit;
-  margin: 0 auto;
+  margin: auto;
 }
 </style>

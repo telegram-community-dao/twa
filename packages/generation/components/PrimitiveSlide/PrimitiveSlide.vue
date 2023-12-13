@@ -1,5 +1,6 @@
 <template>
   <div :class="$style.slide">
+    <slot name="before" />
     <div ref="focusTrapRef" tabindex="0" :class="$style.focustrap" />
 
     <media-preset

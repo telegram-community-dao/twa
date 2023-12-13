@@ -1,0 +1,98 @@
+{
+    "p1": {
+        "upper": {
+            "title": "Telegram Community DAO",
+            "description": "Web3 Fund with a focus on mass adoption projects"
+        },
+        "lower": {
+            "title": "Complete the quest and get&nbsp;10K CVT Tokens",
+            "description": "Completing the quest will take no more than 1 minute"
+        },
+        "button": "Let's start"
+    },
+    "s2": {
+        "title": "Founded by community",
+        "description": "The creation of the DAO was spearheaded by pioneers of the TON community to support Web3 projects aimed at mass adoption. The DAO is managed through a decentralized platform by its managing partners and community members. DAO promotes the principles of openness, transparency and best practices of decentralization.",
+        "button": "Next +1000 CVT"
+    },
+    "s3": {
+        "title": "Liqudity Provider Tokens",
+        "description": "LP token has a special status in our DAO. It represents a financial interest in the organization. When funds are added to the DAO treasury, new LP tokens are created. The more LP tokens you hold, the greater your share of ownership. <b>All LP holders get access to a closed community and private chat for DAO Activities.</b>",
+        "button": "Next +1000 CVT"
+    },
+    "s4": {
+        "title": "Community Vote Tokens",
+        "description": "CVT are used to vote on proposals in the DAO and are used to reward members for their contributions to development. <br /><br />GT (Governance Token) holders manage the multisig wallet and follow the DAO constitution.",
+        "button": "Next +1000 CVT"
+    },
+    "p2": {
+        "title": "Complete to Earn <br /><div style=\"position: relative; display: inline-block\"><svg aria-hidden=\"true\" viewBox=\"0 0 418 42\" style=\"position: absolute; top: 66.6%; fill: green;\" preserveAspectRatio=\"none\"><path d=\"M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z\"></path></svg><span style=\"z-index: 10; position: relative;\">10,000 $CVT</span></div>",
+        "description": "The quest will take less than a minute",
+        "list": [
+            "Purpose project for investment",
+            "Project team",
+            "Project tokenomics"
+        ],
+        "button": "Next"
+    },
+    "sub": {
+        "title": "Unlock the Full Experience!",
+        "list": [
+            "Private chat for DAO members",
+            "Access to private presales",
+            "Exclusive pool for tradable social tokens",
+            "Presentation of DAO for early-adopters"
+        ],
+        "products": [
+            {
+                "title": "12 months / Memberships",
+                "discount": "Discount 70%",
+                "description": "100$/month",
+                "checkout": 1200
+            },
+            {
+                "title": "1 month /  Memberships",
+                "discount": "Discount 0%",
+                "description": "250$/month",
+                "price": 250
+            },
+            {
+                "title": "For LP Token holders",
+                "description": "Free",
+                "price": 0,
+                "button": "Deposit Funds"
+            }
+        ],
+        "links": [
+          {
+            "text": "Terms of use",
+            "href": "https://telegra.ph/Terms-of-Use-12-11"
+          },
+          {
+            "text": "Terms of use",
+            "href": "http://google.com"
+          }
+        ],
+        "button": "Pay {price}"
+    },
+    "buy": {
+        "timer": "Private Presale Ends In",
+        "title": "Exclusive for early-buyers",
+        "description": "",
+        "list": [
+            "10000 CVT For buy each 1000 LP Tokens",
+            "Private offering from onboarding projects",
+            "Airdrop 30% Community Vote Tokens",
+            "Joining the DAO management team"
+        ],
+        "cta": {
+            "title": "Buy LP Tokens"
+        },
+        "product": {
+            "title": "Price per $LP token",
+            "description": "24,000,000 tokens available for sale"
+        },
+        "button": "Pay {price}",
+        "bonus": "Bonus: {amount} Community Vote Tokens"
+    }
+}

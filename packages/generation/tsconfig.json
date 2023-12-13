@@ -7,6 +7,6 @@
     },
     "types": ["pako", "@types/node", "vite/client"]
   },
-  "include": ["."],
+  "include": [".", "../../app/src/custom/paywall_single"],
   "exclude": ["dist", "build", "node_modules"]
 }
