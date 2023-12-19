@@ -10,7 +10,7 @@ export default defineConfig({
   // If you want to add language/currency localization – see ./examples/meditation as reference
   locale: {
     fallback: "en",
-    ru: import("./locales/ru.json"),
+    // ru: import("./locales/ru.json"),
     en: import("./locales/en.json"),
   },
   pages: [
@@ -55,7 +55,7 @@ export default defineConfig({
           },
           title: "s3.title",
           description: "s3.description",
-          button: "p3.button",
+          button: "s3.button",
         },
         {
           extends: "slide",
@@ -72,11 +72,41 @@ export default defineConfig({
           },
         },
         {
+          extends: "slide",
+          media: {
+            type: "video",
+            src: import("./assets/videos/tonclout.mp4"),
+            aspectRatio: 1 / 1
+            // size: 220,
+            // aspectRatio: 3 / 2,
+          },
+          title: "i1.title",
+          description: "i1.description",
+          button: {
+            content: "i1.button",
+          },
+        },
+        {
+          extends: "slide",
+          media: {
+            type: "video",
+            src: import("./assets/videos/tookey.mp4"),
+            aspectRatio: 1 / 1
+            // size: 220,
+            // aspectRatio: 3 / 2,
+          },
+          title: "i2.title",
+          description: "i2.description",
+          button: {
+            content: "i2.button",
+          },
+        },
+        {
           extends: "paywall",
           media: {
             type: "sticker",
             src: import("./assets/stickers/duck_invite.tgs"),
-            size: 220,
+            size: 140,
             aspectRatio: 2 / 1,
           },
           title: "sub.title",

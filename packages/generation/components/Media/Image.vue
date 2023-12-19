@@ -34,6 +34,8 @@ const loadedWebp = useLoadedImage(webp);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .img {

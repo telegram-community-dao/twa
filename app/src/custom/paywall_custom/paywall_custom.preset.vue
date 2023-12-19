@@ -2,7 +2,7 @@
   <slide-preset v-bind="props" :button="null">
     <template #before>
       <div :class="$style.upper">
-        <Image v-bind="bgProps" :class="$style.upperBackground"/>
+        <Image v-bind="bgProps" :class="$style.upperBackground" />
 
         <div :class="$style.timer">
           <p :class="$style.timerTitle">Private Presale Ends In</p>
@@ -13,7 +13,7 @@
 
     <h4 v-html="i18nCta" />
     <div :class="$style.container">
-      <input-text type="text" inputmode="numeric" :model-value="generatedForm['qty']"
+      <input-text type="text" inputmode="numeric" :model-value="qty"
         @update:model-value="onUpdate('qty', $event)" />
     </div>
     <div :class="$style.content">
@@ -35,7 +35,7 @@
     <div :class="[$style.links, $style['links_' + props.shape]]">
       <Link v-for="link in links" v-bind="link" :key="link.text" />
     </div>
-
+    
     <paywall-popup v-model:opened="popupOpened" v-bind="popup" @on-select="onSelectOption"
       @update:opened="onUpdateOpened" />
 
@@ -61,6 +61,7 @@ import {
 import { FORM_STATE_TOKEN } from "@tok/generation/tokens";
 import { useAlerts } from "@tok/ui/use/alerts";
 import { useRouter } from "vue-router";
+import { useMoney } from "@tok/ui/use/money";
 
 const props = withDefaults(
   defineProps<PaywallCustomPresetProps>(),
@@ -71,13 +72,13 @@ const bgProps = {
   type: "image",
   src: import("../../assets/img/deposit_bg.png"),
   alt: "deposit_bg",
-  aspectRatio: 780/300,
+  aspectRatio: 780 / 300,
   style: {
     zIndex: 0
   }
 } as const;
 
-const { product, cta, timerText } = toRefs(props);
+const { product, cta, timerText, mainButtonText } = toRefs(props);
 const popupOpened = ref(false);
 const alertsService = useAlerts({ autoCloseOnUnmount: true });
 const router = useRouter();
@@ -97,16 +98,53 @@ const selectedProduct = computed(() => {
 
 
 const generatedForm = reactive<Record<string, unknown>>({});
+const qty = ref(0)
+
 const onUpdate = (id: string, value: unknown) => {
+  console.log({
+    id,
+    value
+  })
   generatedForm[id] = value;
+  qty.value = Number(value);
   formState?.update({ [id]: value });
 };
 
 const i18nCta = i18n.useTranslated(cta);
 const i18nTimerText = i18n.useTranslated(timerText);
 
+const total = computed(() => {
+  const price = Number(selectedProduct.value.price)
+  return price * qty.value
+})
+
+const totalMoney = useMoney(total)
+
+const buttonText = computed(() => {
+  const button = selectedProduct.value.button;
+  if (typeof button !== 'undefined') {
+    if (typeof button === 'string') {
+      return button
+    } else {
+      return button.content
+    }
+  } else if (typeof mainButtonText?.value !== 'undefined') {
+    return mainButtonText.value
+  }
+
+  return "FUCK"
+})
+
+const translatedMainButton = i18n.useTranslated(buttonText);
+
+console.log({
+    totalMoney,
+    translatedMainButton
+  })
+
 const mainButtonComputedText = computed(() => {
-  return "Pay"
+  const totalText = totalMoney?.value.formatted
+  return translatedMainButton.value.replace(/\{price\}/g, totalText || "");
 })
 
 const onUpdateOpened = (opened: boolean) => {
@@ -116,7 +154,7 @@ const onUpdateOpened = (opened: boolean) => {
 const onSelectOption = (
   id: "telegram_payments" | "wallet_pay" | string | undefined
 ) => {
-  
+
 };
 
 const onSubmit = () => {
@@ -172,6 +210,7 @@ const onSubmit = () => {
   position: relative;
   margin: -1rem -1rem 1rem -1rem;
 }
+
 .upperBackground {
   position: absolute;
   width: 100%;
@@ -186,9 +225,11 @@ const onSubmit = () => {
 
   text-align: center;
 }
+
 .timerTitle {
   margin-bottom: 0.5rem;
 }
+
 .timerValue {
   font-weight: bold;
   font-size: 1.5rem;

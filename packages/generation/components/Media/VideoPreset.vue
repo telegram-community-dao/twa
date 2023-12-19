@@ -6,6 +6,7 @@
       playsinline
       muted
       loop
+      autoplay
       :controls="false"
       :class="$style.video"
       :poster="loadedPoster"
@@ -25,14 +26,16 @@
 <script setup lang="ts">
 import { WAS_INTERACTION_TOKEN } from '@tok/generation/tokens';
 import { noop } from '@tok/ui/utility/noop';
-import { inject, ref, toRefs, watch } from 'vue';
+import { computed, inject, ref, toRefs, watch } from 'vue';
 
 import { VideoPresetProps } from './Media.preset.props';
 import { useLoadedImage } from './useLoadedImage';
 
 const props = defineProps<VideoPresetProps>();
 
-const { src, poster } = toRefs(props);
+const { src, poster, aspectRatio } = toRefs(props);
+const computedAspectRatio = computed(() => aspectRatio?.value ?? (16/9));
+
 
 const loaded = useLoadedImage(src);
 const loadedPoster = useLoadedImage(poster);
@@ -76,10 +79,14 @@ watch(
 
 .container {
   position: relative;
-
-  aspect-ratio: 16/9;
+  aspect-ratio: v-bind(computedAspectRatio);
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
-
 .video {
   position: absolute;
   left: 0;

@@ -16,6 +16,11 @@ const { text, color, textColor, disabled, progress, keepAlive, haptic } =
 const sdk = useTelegramSdk();
 
 const TgMainButton = sdk.MainButton;
+console.log({
+  method: 'MainButton.vue',
+  TgMainButton,
+  sdk
+})
 
 const onClick = () => {
   const _haptic = haptic?.value;
@@ -28,6 +33,7 @@ const onClick = () => {
 };
 
 onMounted(() => {
+  TgMainButton.show();
   TgMainButton.onClick(onClick);
 });
 

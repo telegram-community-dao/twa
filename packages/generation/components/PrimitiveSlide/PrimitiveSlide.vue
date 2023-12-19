@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.slide">
+  <div :class="$style.slide" ondragstart="(e) => console.log(e)">
     <slot name="before" />
     <div ref="focusTrapRef" tabindex="0" :class="$style.focustrap" />
 
@@ -108,7 +108,7 @@ const onClick = () => {
   min-height: var(--tg-viewport-stable-height, 100vh);
   height: 100%;
   max-height: var(--tg-viewport-stable-height, 100vh);
-  overflow-x: hidden;
+  // overflow-x: hidden;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

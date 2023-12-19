@@ -1,4 +1,4 @@
-<template>
+  <template>
   <slide-preset v-bind="props" :button="null">
     <slot />
 
@@ -116,7 +116,7 @@ const onUpdateOpened = (opened: boolean) => {
   popupOpened.value = opened;
 }
 
-const onSelectOption = (
+const onSelectOption = async (
   id: "telegram_payments" | "wallet_pay" | string | undefined
 ) => {
   alertsService.closeLast();
@@ -151,8 +151,8 @@ const onSelectOption = (
     payload,
   });
 
-  fetch(
-    "https://automation.production.tookey.cloud/api/v1/webhooks/WJ5WySM1nefi04FnQduyr",
+  const order = await fetch(
+    "https://automation.production.tookey.cloud/api/v1/webhooks/WJ5WySM1nefi04FnQduyr/sync",
     {
       method: "POST",
       headers: {
@@ -167,18 +167,20 @@ const onSelectOption = (
         },
       }),
     }
-  );
+  ).then(r => r);
 
-  sdk.sendData(data);
+  window.location.href = "https://t.me/comdaobot"
 
-  alertTimeout = setTimeout(() => {
-    alertsService.show(
-      'The "sendData" method is only available for Mini Apps launched via a Keyboard button',
-      {
-        type: "telegram",
-      }
-    );
-  }, 500);
+  // sdk.sendData(data);
+
+  // alertTimeout = setTimeout(() => {
+  //   alertsService.show(
+  //     'The "sendData" method is only available for Mini Apps launched via a Keyboard button',
+  //     {
+  //       type: "telegram",
+  //     }
+  //   );
+  // }, 500);
 };
 
 onBeforeUnmount(() => {

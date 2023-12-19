@@ -28,6 +28,8 @@ export type _GenerationSlideConfig = {
 
   list?: _GenerationListOptionsConfig;
 
+  links?: { text: string; href: string }[];
+
   button: string | (Pick<FlatButtonProps, 'to'> & { content: string }) | null;
 };
 

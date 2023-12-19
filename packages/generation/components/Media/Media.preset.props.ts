@@ -59,6 +59,8 @@ export type VideoPresetProps = {
     | typeof import('*.webp')
     | any
   >;
+  
+  aspectRatio?: number;
 
   style?: string | CSSProperties;
 };
