@@ -1,9 +1,16 @@
-  <template>
+<template>
   <slide-preset v-bind="props" :button="null">
+    <template #before>
+      <slot name="before" />
+    </template>
     <slot />
 
     <div :class="[$style.links, $style['links_' + props.shape]]">
       <Link v-for="link in links" v-bind="link" :key="link.text" />
+    </div>
+
+    <div :class="$style.loading" v-if="loading">
+      <span :class="$style.loader"></span>
     </div>
 
     <paywall-popup v-model:opened="popupOpened" v-bind="popup" @on-select="onSelectOption"
@@ -94,6 +101,7 @@ const mainButtonComputedText = computed(() => {
 });
 
 const popupOpened = ref(false);
+const loading = ref(false);
 
 const onSubmit = () => {
   if (selectedProduct.value) {
@@ -110,16 +118,14 @@ const onSubmit = () => {
 let alertTimeout: ReturnType<typeof setTimeout> | undefined;
 
 const onUpdateOpened = (opened: boolean) => {
-  alertsService.show(`Update Opened ${opened}`, {
-    type: "success",
-  });
   popupOpened.value = opened;
 }
 
 const onSelectOption = async (
-  id: "telegram_payments" | "wallet_pay" | string | undefined
+  id: "cryptomus" | "wallet_pay" | undefined
 ) => {
   alertsService.closeLast();
+  loading.value = true;
 
   if (alertTimeout) {
     clearTimeout(alertTimeout);
@@ -146,13 +152,20 @@ const onSelectOption = async (
     description: _product.description || "Payment description",
   };
 
-  const data = JSON.stringify({
-    product: dataProduct,
-    payload,
-  });
+  const hooks = {
+    'cryptomus': import.meta.env.VITE_CRYPTOMUS_URL,
+    'wallet_pay': import.meta.env.VITE_WALLETPAY_URL,
+  };
+
+  if (!hooks[id]) {
+    alertsService.show(`Hook for ${id} not found`, {
+      type: "error",
+    });
+    throw new Error(`Hook for ${id} not found`);
+  }
 
   const order = await fetch(
-    "https://automation.production.tookey.cloud/api/v1/webhooks/WJ5WySM1nefi04FnQduyr/sync",
+    hooks[id] + '/sync',
     {
       method: "POST",
       headers: {
@@ -164,23 +177,13 @@ const onSelectOption = async (
         data: {
           product: dataProduct,
           payload,
+          form: formState?.state.value,
         },
       }),
     }
   ).then(r => r);
 
   window.location.href = "https://t.me/comdaobot"
-
-  // sdk.sendData(data);
-
-  // alertTimeout = setTimeout(() => {
-  //   alertsService.show(
-  //     'The "sendData" method is only available for Mini Apps launched via a Keyboard button',
-  //     {
-  //       type: "telegram",
-  //     }
-  //   );
-  // }, 500);
 };
 
 onBeforeUnmount(() => {
@@ -199,4 +202,76 @@ onBeforeUnmount(() => {
     margin-top: auto;
   }
 }
-</style>
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: #5EA5DE88;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// spin animation
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 5px solid #FFF;
+  animation: prixClipFix 2s linear infinite;
+}
+
+.loader::after {
+  transform: rotate3d(90, 90, 0, 180deg);
+  border-color: #5EA5DE;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0)
+  }
+
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0)
+  }
+
+  75%,
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%)
+  }
+}</style>

@@ -76,7 +76,7 @@ export default defineConfig({
           media: {
             type: "video",
             src: import("./assets/videos/tonclout.mp4"),
-            aspectRatio: 1 / 1
+            aspectRatio: 1 / 1,
             // size: 220,
             // aspectRatio: 3 / 2,
           },
@@ -91,7 +91,7 @@ export default defineConfig({
           media: {
             type: "video",
             src: import("./assets/videos/tookey.mp4"),
-            aspectRatio: 1 / 1
+            aspectRatio: 1 / 1,
             // size: 220,
             // aspectRatio: 3 / 2,
           },
@@ -99,66 +99,69 @@ export default defineConfig({
           description: "i2.description",
           button: {
             content: "i2.button",
-          },
-        },
-        {
-          extends: "paywall",
-          media: {
-            type: "sticker",
-            src: import("./assets/stickers/duck_invite.tgs"),
-            size: 140,
-            aspectRatio: 2 / 1,
-          },
-          title: "sub.title",
-          list: ["sub.list.0", "sub.list.1", "sub.list.2", "sub.list.3"],
-          links: [
-            {
-              text: "sub.links.0.text",
-              href: "sub.links.0.href",
-            },
-          ],
-          products: [
-            {
-              id: "year",
-              title: "sub.products.0.title",
-              description: "sub.products.0.description",
-              discount: "sub.products.0.discount",
-              price: 1200,
-            },
-            {
-              id: "month",
-              title: "sub.products.1.title",
-              description: "sub.products.1.description",
-              discount: "sub.products.1.discount",
-              price: 250,
-            },
-            {
-              id: "lp",
-              title: "sub.products.2.title",
-              description: "sub.products.2.description",
-              price: "sub.products.2.price",
-              button: {
-                content: "sub.products.2.button",
-                to: "/lp",
-              },
-            },
-          ],
-          mainButtonText: "sub.button",
-          popup: {
-            buttons: [
-              {
-                id: "wallet_pay",
-                media: {
-                  type: "emodji" as const,
-                  src: "👛",
-                },
-                type: "default" as const,
-                text: "Wallet pay",
-              },
-            ],
+            to: '/select'
           },
         },
       ],
+    },
+    {
+      extends: "paywall",
+      path: '/select',
+      media: {
+        type: "sticker",
+        src: import("./assets/stickers/duck_invite.tgs"),
+        size: 140,
+        aspectRatio: 2 / 1,
+      },
+      title: "sub.title",
+      list: ["sub.list.0", "sub.list.1", "sub.list.2", "sub.list.3"],
+      links: [
+        {
+          text: "sub.links.0.text",
+          href: "sub.links.0.href",
+        },
+      ],
+      products: [
+        {
+          id: "month",
+          title: "sub.subscribe.title",
+          description: "sub.subscribe.description",
+          price: 250,
+        },
+        {
+          id: "lp",
+          title: "sub.lp.title",
+          description: "sub.lp.description",
+          price: "sub.lp.price",
+          button: {
+            content: "sub.lp.button",
+            to: "/lp",
+          },
+        },
+      ],
+      mainButtonText: "sub.button",
+      popup: {
+        buttons: [
+          {
+            id: "wallet_pay",
+            media: {
+              type: "emodji" as const,
+              src: "👛",
+            },
+            type: "default" as const,
+            text: "Wallet pay",
+          },
+          {
+            id: "cryptomus",
+            media: {
+              type: "emodji" as const,
+              src: "🎶",
+            },
+            type: "default" as const,
+            text: "Cryptomus",
+          },
+        ],
+      },
     },
     {
       extends: "paywall_custom",
@@ -177,6 +180,28 @@ export default defineConfig({
       mainButtonText: "buy.button",
       button: {
         content: "buy.button",
+      },
+      popup: {
+        buttons: [
+          {
+            id: "wallet_pay",
+            media: {
+              type: "emodji" as const,
+              src: "👛",
+            },
+            type: "default" as const,
+            text: "Wallet pay",
+          },
+          {
+            id: "cryptomus",
+            media: {
+              type: "emodji" as const,
+              src: "🎶",
+            },
+            type: "default" as const,
+            text: "Cryptomus",
+          },
+        ],
       },
       links: [
         {

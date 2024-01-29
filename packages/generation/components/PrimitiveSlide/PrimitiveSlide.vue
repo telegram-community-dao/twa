@@ -3,6 +3,7 @@
     <slot name="before" />
     <div ref="focusTrapRef" tabindex="0" :class="$style.focustrap" />
 
+    <slot name="beforeMedia" />
     <media-preset
       v-if="media"
       v-bind="media"
